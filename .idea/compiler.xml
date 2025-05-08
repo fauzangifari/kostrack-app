@@ -2,7 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="KosTrack.app" target="21" />
+      <module name="KosTrack.data" target="21" />
+      <module name="KosTrack.domain" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
