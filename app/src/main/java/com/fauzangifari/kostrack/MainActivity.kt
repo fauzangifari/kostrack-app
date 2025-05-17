@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.fauzangifari.kostrack.ui.screen.signup.SignupScreen
 import com.fauzangifari.kostrack.ui.screen.splash.SplashScreen
 import com.fauzangifari.kostrack.ui.screen.welcome.WelcomeScreen
 import com.fauzangifari.kostrack.ui.theme.KosTrackTheme
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 if (showSplash) {
                     SplashScreen { showSplash = false }
                 } else {
-                    WelcomeScreen()
+                    SignupScreen()
                 }
             }
         }

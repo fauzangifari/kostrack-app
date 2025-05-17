@@ -57,7 +57,7 @@ fun ButtonCustom(
             OutlinedButton(
                 onClick = onClick,
                 shape = shape,
-                border = BorderStroke(2.dp, borderColor),
+                border = BorderStroke(1.dp, borderColor),
                 modifier = modifier.height(40.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = textColor)
             ) {
