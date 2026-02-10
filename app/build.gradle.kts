@@ -58,11 +58,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Navigation
-//    implementation(libs.androidx.navigation.compose)
+        // Navigation
+        implementation(libs.androidx.navigation.compose)
+    
+        // Koin        implementation(libs.koin.core)
+        implementation(libs.koin.android)
+        implementation(libs.koin.androidx.compose)
 
-    // Koin
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-}
+        // Domain & Data Modules
+        implementation(project(":domain"))
+        implementation(project(":data"))
+
+    }
+
+    

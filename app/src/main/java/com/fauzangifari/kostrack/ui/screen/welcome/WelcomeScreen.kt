@@ -24,16 +24,17 @@ import com.fauzangifari.kostrack.R
 import com.fauzangifari.kostrack.ui.components.ButtonCustom
 import com.fauzangifari.kostrack.ui.components.ButtonStyle
 import com.fauzangifari.kostrack.ui.components.ButtonType
-import com.fauzangifari.kostrack.ui.screen.signup.SignupScreen
 import com.fauzangifari.kostrack.ui.theme.Green500
 import com.fauzangifari.kostrack.ui.theme.PlusJakartaSans
 
 @Composable
 fun WelcomeScreen(
     modifier: Modifier = Modifier,
+    onGetStartedClick: () -> Unit = {},
+    onLoginClick: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
@@ -70,7 +71,7 @@ fun WelcomeScreen(
 
         ButtonCustom(
             value = "Sign up",
-            onClick = {},
+            onClick = onGetStartedClick,
             fontSize = 16,
             buttonType = ButtonType.REGULAR,
             buttonStyle = ButtonStyle.FILLED,
@@ -83,7 +84,7 @@ fun WelcomeScreen(
 
         ButtonCustom(
             value = "Sign in",
-            onClick = {},
+            onClick = onLoginClick,
             fontSize = 16,
             buttonType = ButtonType.REGULAR,
             buttonStyle = ButtonStyle.OUTLINED,

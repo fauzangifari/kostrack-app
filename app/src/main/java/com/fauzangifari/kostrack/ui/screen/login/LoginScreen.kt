@@ -1,22 +1,18 @@
-package com.fauzangifari.kostrack.ui.screen.signup
+package com.fauzangifari.kostrack.ui.screen.login
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,17 +26,16 @@ import com.fauzangifari.kostrack.ui.theme.Green500
 import com.fauzangifari.kostrack.ui.theme.PlusJakartaSans
 
 @Composable
-fun SignupScreen(
+fun LoginScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
+    onLoginClick: () -> Unit = {},
+    onGoogleLoginClick: () -> Unit = {},
     onSignupClick: () -> Unit = {},
-    onGoogleSignupClick: () -> Unit = {},
-    onSignInClick: () -> Unit = {}
+    onForgotPasswordClick: () -> Unit = {}
 ) {
-    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -64,7 +59,7 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Daftar sekarang!",
+            text = "Selamat Datang!",
             textAlign = TextAlign.Start,
             fontSize = 32.sp,
             fontFamily = PlusJakartaSans,
@@ -72,10 +67,8 @@ fun SignupScreen(
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         Text(
-            text = "Lengkapi data dirimu untuk mulai menggunakan KosTrack.",
+            text = "Masuk untuk melanjutkan pengelolaan kos kamu dengan mudah.",
             textAlign = TextAlign.Start,
             fontSize = 16.sp,
             fontFamily = PlusJakartaSans,
@@ -86,26 +79,11 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         TextInput(
-            label = "Nama Lengkap",
-            value = name,
-            placeholder = "Masukkan Nama Lengkap",
-            onValueChange = { name = it },
-            singleLine = true,
-            isError = false,
-            supportingText = null,
-            isPassword = false,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextInput(
             label = "Alamat Email",
             value = email,
             placeholder = "Masukkan Email",
             onValueChange = { email = it },
             singleLine = true,
-            isError = false,
-            supportingText = null,
             isPassword = false,
         )
 
@@ -117,16 +95,30 @@ fun SignupScreen(
             placeholder = "Masukkan Kata Sandi",
             onValueChange = { password = it },
             singleLine = true,
-            isError = false,
-            supportingText = null,
             isPassword = true,
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Text(
+                text = "Lupa Kata Sandi?",
+                fontSize = 14.sp,
+                fontFamily = PlusJakartaSans,
+                fontWeight = FontWeight.SemiBold,
+                color = Green500,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable(onClick = onForgotPasswordClick)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         ButtonCustom(
-            value = "Daftar",
-            onClick = onSignupClick,
+            value = "Masuk",
+            onClick = onLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
@@ -138,8 +130,8 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         ButtonCustom(
-            value = "Daftar dengan Google",
-            onClick = onGoogleSignupClick,
+            value = "Masuk dengan Google",
+            onClick = onGoogleLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
@@ -157,25 +149,25 @@ fun SignupScreen(
             textColor = Green500
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Sudah punya akun?",
+                text = "Belum punya akun?",
                 fontFamily = PlusJakartaSans
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Sign in",
+                text = "Daftar",
                 textAlign = TextAlign.Start,
                 fontSize = 16.sp,
                 fontFamily = PlusJakartaSans,
                 fontWeight = FontWeight.Bold,
                 color = Green500,
-                modifier = Modifier.clickable(onClick = onSignInClick)
+                modifier = Modifier.clickable(onClick = onSignupClick)
             )
         }
     }
@@ -183,8 +175,6 @@ fun SignupScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SignupScreenPreview() {
-    MaterialTheme {
-        SignupScreen()
-    }
+fun LoginScreenPreview() {
+    LoginScreen()
 }

@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "KosTrack"
 include(":app")
+include(":domain")
+include(":data")

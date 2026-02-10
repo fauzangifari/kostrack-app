@@ -13,3 +13,15 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Android & IDE
+/build
+/.idea/
+*.iml
+
+# AI & Documentation
+.gemini/
+.docs/
+.context/
+
+
