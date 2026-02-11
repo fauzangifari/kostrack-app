@@ -36,6 +36,7 @@ fun ButtonCustom(
     backgroundColor: Color = Green500,
     textColor: Color = Color.White,
     borderColor: Color = Green500,
+    isEnabled: Boolean = true,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -45,6 +46,7 @@ fun ButtonCustom(
         ButtonStyle.FILLED -> {
             Button(
                 onClick = onClick,
+                enabled = isEnabled,
                 colors = ButtonDefaults.buttonColors(containerColor = backgroundColor),
                 shape = shape,
                 modifier = modifier.height(40.dp)
@@ -56,6 +58,7 @@ fun ButtonCustom(
         ButtonStyle.OUTLINED -> {
             OutlinedButton(
                 onClick = onClick,
+                enabled = isEnabled,
                 shape = shape,
                 border = BorderStroke(1.dp, borderColor),
                 modifier = modifier.height(40.dp),

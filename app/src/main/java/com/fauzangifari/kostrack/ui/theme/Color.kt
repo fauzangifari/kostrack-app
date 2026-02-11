@@ -25,17 +25,18 @@ val Grey700 = Color(0xFF6E7582)
 val Grey800 = Color(0xFF555B65)
 val Grey900 = Color(0xFF41454D)
 
-// Success
-val SuccessLight = Color(0xFFB2F2BB)
-val SuccessDark = Color(0xFF004F2A)
+// Semantic Colors
+val InfoBase = Color(0xFF2196F3)
+val InfoLight = Color(0xFFE3F2FD)
 
-// Warning
-val WarningLight = Color(0xFFFFF0B3)
-val WarningDark = Color(0xFF67500A)
+val SuccessBase = Color(0xFF4CAF50)
+val SuccessLight = Color(0xFFE8F5E9)
 
-// Danger
-val DangerLight = Color(0xFFF5B7B1)
-val DangerDark = Color(0xFF641812)
+val WarningBase = Color(0xFFFF9800)
+val WarningLight = Color(0xFFFFF3E0)
+
+val ErrorBase = Color(0xFFF44336)
+val ErrorLight = Color(0xFFFFEBEE)
 
 // Neutral
 val White = Color(0xFFFFFFFF)
