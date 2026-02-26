@@ -25,6 +25,11 @@ val Grey700 = Color(0xFF6E7582)
 val Grey800 = Color(0xFF555B65)
 val Grey900 = Color(0xFF41454D)
 
+// Neomorphism
+val NeoBg = Color(0xFFE8ECE9)
+val NeoShadowLight = Color(0xFFFCFFFC)
+val NeoShadowDark = Color(0xFFC5C9C6)
+
 // Semantic Colors
 val InfoBase = Color(0xFF2196F3)
 val InfoLight = Color(0xFFE3F2FD)
