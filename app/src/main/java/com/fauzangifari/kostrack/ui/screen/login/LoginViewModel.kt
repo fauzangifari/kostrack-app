@@ -2,8 +2,8 @@ package com.fauzangifari.kostrack.ui.screen.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fauzangifari.kostrack.domain.repository.AuthRepository
-import com.fauzangifari.kostrack.domain.repository.SessionRepository
+import com.fauzangifari.kostrack.domain.usecase.auth.SignInUseCase
+import com.fauzangifari.kostrack.domain.usecase.session.SetLoggedInUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,8 +16,8 @@ sealed class LoginUiState {
 }
 
 class LoginViewModel(
-    private val authRepository: AuthRepository,
-    private val sessionRepository: SessionRepository
+    private val signInUseCase: SignInUseCase,
+    private val setLoggedInUseCase: SetLoggedInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
@@ -26,9 +26,9 @@ class LoginViewModel(
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
-            authRepository.signIn(email, password)
+            signInUseCase(email, password)
                 .onSuccess {
-                    sessionRepository.setLoggedIn(true)
+                    setLoggedInUseCase(true)
                     _uiState.value = LoginUiState.Success("Login successful!")
                 }
                 .onFailure {

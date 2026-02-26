@@ -1,11 +1,11 @@
 package com.fauzangifari.kostrack.ui.screen.splash
 
 import androidx.lifecycle.ViewModel
-import com.fauzangifari.kostrack.domain.repository.SessionRepository
+import com.fauzangifari.kostrack.domain.usecase.session.IsLoggedInUseCase
 import kotlinx.coroutines.flow.Flow
 
 class SplashViewModel(
-    private val sessionRepository: SessionRepository
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : ViewModel() {
-    val isLoggedIn: Flow<Boolean> = sessionRepository.isLoggedIn()
+    val isLoggedIn: Flow<Boolean> = isLoggedInUseCase()
 }

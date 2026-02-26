@@ -2,8 +2,8 @@ package com.fauzangifari.kostrack.ui.screen.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fauzangifari.kostrack.domain.repository.AuthRepository
-import com.fauzangifari.kostrack.domain.repository.SessionRepository
+import com.fauzangifari.kostrack.domain.usecase.auth.SignUpUseCase
+import com.fauzangifari.kostrack.domain.usecase.session.SetLoggedInUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,8 +16,8 @@ sealed class SignupUiState {
 }
 
 class SignupViewModel(
-    private val authRepository: AuthRepository,
-    private val sessionRepository: SessionRepository
+    private val signUpUseCase: SignUpUseCase,
+    private val setLoggedInUseCase: SetLoggedInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SignupUiState>(SignupUiState.Idle)
@@ -26,10 +26,9 @@ class SignupViewModel(
     fun signUp(email: String, password: String, fullName: String) {
         viewModelScope.launch {
             _uiState.value = SignupUiState.Loading
-            authRepository.signUp(email, password, fullName)
+            signUpUseCase(email, password, fullName)
                 .onSuccess {
-                    // We automatically log them in or just set flag after signup success
-                    sessionRepository.setLoggedIn(true)
+                    setLoggedInUseCase(true)
                     _uiState.value = SignupUiState.Success("Registration successful!")
                 }
                 .onFailure {
