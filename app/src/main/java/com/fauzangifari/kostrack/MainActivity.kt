@@ -7,7 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +29,9 @@ import com.fauzangifari.kostrack.ui.screen.signup.SignupScreen
 import com.fauzangifari.kostrack.ui.screen.splash.SplashScreen
 import com.fauzangifari.kostrack.ui.screen.splash.SplashViewModel
 import com.fauzangifari.kostrack.ui.screen.welcome.WelcomeScreen
+import com.fauzangifari.kostrack.ui.screen.rooms.RoomEditorScreen
+import com.fauzangifari.kostrack.ui.screen.tenants.TenantDetailScreen
+import com.fauzangifari.kostrack.ui.screen.tenants.TenantEditorScreen
 import com.fauzangifari.kostrack.ui.theme.Green500
 import com.fauzangifari.kostrack.ui.theme.KosTrackTheme
 import com.fauzangifari.kostrack.ui.theme.White
@@ -132,7 +137,111 @@ fun RootApp() {
         }
 
         composable(Screen.Main.route) {
-            MainFlowScreen()
+            MainFlowScreen(rootNavController = navController)
+        }
+
+        composable(
+            route = Screen.PropertyDetail.route,
+            arguments = listOf(
+                androidx.navigation.navArgument("propertyId") {
+                    type = androidx.navigation.NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId") ?: ""
+            com.fauzangifari.kostrack.ui.screen.properties.PropertyDetailScreen(
+                propertyId = propertyId,
+                onBackClick = { navController.navigateUp() },
+                onEditPropertyClick = { id -> 
+                    navController.navigate(Screen.AddEditProperty.createRoute(id)) 
+                },
+                onAddRoomClick = { id -> 
+                    navController.navigate(Screen.AddEditRoom.createRoute(id)) 
+                },
+                onRoomClick = { propId, roomId -> 
+                    navController.navigate(Screen.AddEditRoom.createRoute(propId, roomId)) 
+                },
+                onAssignTenantClick = { propId, roomId ->
+                    navController.navigate(Screen.AssignTenant.createRoute(propId, roomId))
+                },
+                onTenantClick = { tenantId ->
+                    navController.navigate(Screen.TenantDetail.createRoute(tenantId))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.AddEditProperty.route,
+            arguments = listOf(
+                androidx.navigation.navArgument("propertyId") {
+                    type = androidx.navigation.NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId")
+            com.fauzangifari.kostrack.ui.screen.properties.PropertyEditorScreen(
+                propertyId = propertyId,
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = Screen.AddEditRoom.route,
+            arguments = listOf(
+                androidx.navigation.navArgument("propertyId") {
+                    type = androidx.navigation.NavType.StringType
+                },
+                androidx.navigation.navArgument("roomId") {
+                    type = androidx.navigation.NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId") ?: ""
+            val roomId = backStackEntry.arguments?.getString("roomId")
+            RoomEditorScreen(
+                propertyId = propertyId,
+                roomId = roomId,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.AssignTenant.route,
+            arguments = listOf(
+                androidx.navigation.navArgument("propertyId") {
+                    type = androidx.navigation.NavType.StringType
+                },
+                androidx.navigation.navArgument("roomId") {
+                    type = androidx.navigation.NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId") ?: ""
+            val roomId = backStackEntry.arguments?.getString("roomId") ?: ""
+            TenantEditorScreen(
+                propertyId = propertyId,
+                roomId = roomId,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.TenantDetail.route,
+            arguments = listOf(
+                androidx.navigation.navArgument("tenantId") {
+                    type = androidx.navigation.NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val tenantId = backStackEntry.arguments?.getString("tenantId") ?: ""
+            TenantDetailScreen(
+                tenantId = tenantId,
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }
