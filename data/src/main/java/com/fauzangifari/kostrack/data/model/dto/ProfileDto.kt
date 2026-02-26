@@ -8,5 +8,5 @@ data class ProfileDto(
     @SerialName("id") val id: String,
     @SerialName("full_name") val fullName: String,
     @SerialName("email") val email: String,
-    @SerialName("role") val role: String = "TENANT"
+    @SerialName("role") val role: String? = null
 )
