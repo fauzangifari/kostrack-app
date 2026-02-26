@@ -3,6 +3,7 @@ package com.fauzangifari.kostrack.data.repository
 import android.util.Log
 import com.fauzangifari.kostrack.data.model.dto.ProfileDto
 import com.fauzangifari.kostrack.domain.model.User
+import com.fauzangifari.kostrack.domain.model.UserRole
 import com.fauzangifari.kostrack.domain.repository.AuthRepository
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -19,17 +20,21 @@ class AuthRepositoryImpl(
 
     override suspend fun signUp(email: String, password: String, fullName: String): Result<Unit> {
         return try {
-            supabaseClient.auth.signUpWith(Email) {
+            val authResponse = supabaseClient.auth.signUpWith(Email) {
                 this.email = email
                 this.password = password
             }
             
-            supabaseClient.auth.currentUserOrNull()?.let {
+            val userId = authResponse?.id ?: supabaseClient.auth.currentUserOrNull()?.id
+            
+            userId?.let { id ->
                 // Insert into profiles table
+                // Set default role to OWNER so user can manage properties
                 val profile = ProfileDto(
-                    id = it.id,
+                    id = id,
                     fullName = fullName,
-                    email = email
+                    email = email,
+                    role = "OWNER"
                 )
                 supabaseClient.postgrest["profiles"].insert(profile)
             }
@@ -89,43 +94,50 @@ class AuthRepositoryImpl(
         return supabaseClient.auth.sessionStatus.map { status ->
             when (status) {
                 is SessionStatus.Authenticated -> {
-                    val user = status.session.user
-                    val userId = user?.id ?: ""
-                    Log.d("AuthRepository", "Authenticated: userId=$userId")
+                    val authUser = status.session.user
+                    val userId = authUser?.id ?: return@map null
                     
                     // Fetch profile from Supabase
-                    val profile = try {
-                        val result = supabaseClient.postgrest["profiles"]
+                    var profile = try {
+                        supabaseClient.postgrest["profiles"]
                             .select {
                                 filter {
                                     eq("id", userId)
                                 }
                             }
                             .decodeSingleOrNull<ProfileDto>()
-                        Log.d("AuthRepository", "Profile fetch success: $result")
-                        result
                     } catch (e: Exception) {
-                        Log.e("AuthRepository", "Error fetching profile: ${e.message}", e)
+                        Log.e("AuthRepository", "Error fetching profile: ${e.message}")
                         null
+                    }
+
+                    if (profile == null && authUser != null) {
+                        try {
+                            val newProfile = ProfileDto(
+                                id = userId,
+                                fullName = authUser.userMetadata?.get("full_name")?.toString() ?: "User",
+                                email = authUser.email ?: "",
+                                role = "OWNER"
+                            )
+                            supabaseClient.postgrest["profiles"].insert(newProfile)
+                            profile = newProfile
+                            Log.d("AuthRepository", "Self-healed: Profile created for $userId")
+                        } catch (e: Exception) {
+                            Log.e("AuthRepository", "Failed self-healing profile: ${e.message}")
+                        }
                     }
 
                     User(
                         id = userId,
-                        email = user?.email ?: "",
+                        email = authUser.email ?: "",
                         fullName = profile?.fullName,
-                        role = profile?.role
-                    ).also { 
-                        Log.d("AuthRepository", "Returning User: $it")
-                    }
+                        role = profile?.role?.let {
+                            try { UserRole.valueOf(it) } catch (e: Exception) { null }
+                        }
+                    )
                 }
-                is SessionStatus.NotAuthenticated -> {
-                    Log.d("AuthRepository", "Not Authenticated")
-                    null
-                }
-                else -> {
-                    Log.d("AuthRepository", "Session status: $status")
-                    null
-                }
+                is SessionStatus.NotAuthenticated -> null
+                else -> null
             }
         }
     }
